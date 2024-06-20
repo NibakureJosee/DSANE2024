@@ -31,15 +31,15 @@ bool isValidDate(const std::string &dob) {
     return true;
 }
 
-class PatientsLL {
+class Patients {
 public:
     int patient_id;
     std::string name;
     std::string dob;
     std::string gender;
-    PatientsLL *next;
+    Patients *next;
 
-    PatientsLL(int patient_id, std::string name, std::string dob, std::string gender) {
+    Patients(int patient_id, std::string name, std::string dob, std::string gender) {
         this->patient_id = patient_id;
         this->name = name;
         this->dob = dob;
@@ -48,14 +48,14 @@ public:
     }
 };
 
-class DoctorsLL {
+class Doctors {
 public:
     int doctor_id;
     std::string name;
     std::string specialization;
-    DoctorsLL *next;
+    Doctors *next;
 
-    DoctorsLL(int doctor_id, std::string name, std::string specialization) {
+    Doctors(int doctor_id, std::string name, std::string specialization) {
         this->doctor_id = doctor_id;
         this->name = name;
         this->specialization = specialization;
@@ -82,8 +82,8 @@ public:
 
 class HealthcareSystem {
 public:
-    PatientsLL *patients;
-    DoctorsLL *doctors;
+    Patients *patients;
+    Doctors *doctors;
     Appointments *appointments;
 
     HealthcareSystem() {
@@ -95,14 +95,14 @@ public:
     ~HealthcareSystem() {
         // Delete all nodes in the patients linked list
         while (patients != nullptr) {
-            PatientsLL* next = patients->next;
+            Patients* next = patients->next;
             delete patients;
             patients = next;
         }
 
         // Delete all nodes in the doctors linked list
         while (doctors != nullptr) {
-            DoctorsLL* next = doctors->next;
+            Doctors* next = doctors->next;
             delete doctors;
             doctors = next;
         }
@@ -117,7 +117,7 @@ public:
 
     //DOES PATIENTS EXIST
     bool doesPatientIdExist(int patient_id) const{
-        PatientsLL *temp = patients;
+        Patients *temp = patients;
         while (temp != nullptr) {
             if (temp->patient_id == patient_id) {
                 return true;
@@ -129,7 +129,7 @@ public:
 
     //SEE IF THE DOCTOR EXISTS
     bool doesDoctorIdExist(int doctor_id) const {
-        DoctorsLL *temp = doctors;
+        Doctors *temp = doctors;
         while (temp != nullptr) {
             if (temp->doctor_id == doctor_id) {
                 return true;
@@ -151,27 +151,27 @@ public:
     }
 
     void registerPatient(int patient_id, std::string name, std::string dob, std::string gender) {
-        PatientsLL *temp = patients;
+        Patients *temp = patients;
         while (temp != nullptr) {
             if (temp->patient_id == patient_id) {
-                throw std::invalid_argument("Patient ID already exists. Please enter a unique ID.");
+                throw std::invalid_argument("Patient ID already exists.");
             }
             temp = temp->next;
         }
-        auto *newPatient = new PatientsLL(patient_id, name, dob, gender);
+        auto *newPatient = new Patients(patient_id, name, dob, gender);
         newPatient->next = patients;
         patients = newPatient;
     }
 
     void registerDoctor(int doctor_id, std::string name, std::string specialization) {
-        DoctorsLL *temp = doctors;
+        Doctors *temp = doctors;
         while (temp != nullptr) {
             if (temp->doctor_id == doctor_id) {
-                throw std::invalid_argument("Doctor ID already exists. Please enter a unique ID.");
+                throw std::invalid_argument("Doctor ID already exists.");
             }
             temp = temp->next;
         }
-        auto *newDoctor = new DoctorsLL(doctor_id, name, specialization);
+        auto *newDoctor = new Doctors(doctor_id, name, specialization);
         newDoctor->next = doctors;
         doctors = newDoctor;
     }
@@ -192,16 +192,16 @@ public:
     void RegisterPatient() {
         int patient_id;
         std::string name, dob, gender;
-        std::cout << "***PATIENT REGISTRATION\n***";
+        std::cout << "PATIENT REGISTRATION\n";
         while (true) {
             try {
                 std::cout << "ID: ";
                 std::cin >> patient_id;
                 if (std::cin.fail()) {
-                    throw std::invalid_argument("Invalid input for patient ID. Please enter a number.");
+                    throw std::invalid_argument(" Please enter a number.");
                 }
                 if(doesPatientIdExist(patient_id)) {
-                    throw std::invalid_argument("Patient ID already exists. Please enter a unique ID.");
+                    throw std::invalid_argument("Patient ID already exists.");
                 }
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // clear the input buffer
                 std::cout << "NAME: ";
@@ -238,16 +238,16 @@ public:
     void RegisterDoctor() {
         int doctor_id;
         std::string name, specialization;
-        std::cout << "***DOCTOR REGISTRATION***\n";
+        std::cout << "DOCTOR REGISTRATION\n";
         while (true) {
             try {
                 std::cout << "ID: ";
                 std::cin >> doctor_id;
                 if (std::cin.fail()) {
-                    throw std::invalid_argument("Invalid input for doctor ID. Please enter a number.");
+                    throw std::invalid_argument(" Please enter a number.");
                 }
                 if(doesDoctorIdExist(doctor_id)) {
-                    throw std::invalid_argument("Doctor ID already exists. Please enter a unique ID.");
+                    throw std::invalid_argument("Doctor ID already exists.");
                 }
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // clear the input buffer
                 std::cout << "NAME: ";
@@ -267,25 +267,25 @@ public:
     void RegisterAppointment() {
         int appointment_id, patient_id, doctor_id;
         std::string appointment_date;
-        std::cout << "***APPOINTMENT REGISTRATION\n***";
+        std::cout << "APPOINTMENT REGISTRATION\n";
         while (true) {
             try {
                 std::cout << "ID: ";
                 std::cin >> appointment_id;
                 if (std::cin.fail()) {
-                    throw std::invalid_argument("Invalid input for appointment ID. Please enter a number.");
+                    throw std::invalid_argument("Invalid input. Please enter a number.");
                 }
                 if (doesAppointmentIdExist(appointment_id)) {
-                    throw std::invalid_argument("Appointment ID already exists. Please enter a unique ID.");
+                    throw std::invalid_argument("Appointment ID already exists.");
                 }
                 std::cout << "PATIENT ID: ";
                 std::cin >> patient_id;
                 if (std::cin.fail()) {
-                    throw std::invalid_argument("Invalid input for patient ID. Please enter a number.");
+                    throw std::invalid_argument("Invalid input, Please enter a number.");
                 }
                 // check if the patient ID exists
                 if (!doesPatientIdExist(patient_id)) {
-                    throw std::invalid_argument("Patient ID does not exist. Please register the patient first.");
+                    throw std::invalid_argument("Patient does not exist. Please register");
                 }
                 std::cout << "DOCTOR ID: ";
                 std::cin >> doctor_id;
@@ -318,16 +318,16 @@ public:
     }
 
     void displayPatients() const {
-        PatientsLL *temp = patients;
+        Patients *temp = patients;
         while (temp != nullptr) {
-            std::cout << "Patient ID: " << temp->patient_id << ", Name: " << temp->name << ", DOB: " << temp->dob <<
+            std::cout << "Patient ID: " << temp->patient_id << ", Name: " << temp->name << ", DoB: " << temp->dob <<
                     ", Gender: " << temp->gender << std::endl;
             temp = temp->next;
         }
     }
 
     void displayDoctors() const {
-        DoctorsLL *temp = doctors;
+        Doctors *temp = doctors;
         while (temp != nullptr) {
             std::cout << "Doctor ID: " << temp->doctor_id << ", Name: " << temp->name << ", Specialization: " << temp->
                     specialization << std::endl;
@@ -349,8 +349,14 @@ int main() {
     HealthcareSystem system;
     int choice;
     std::cout << "*****************************************************\n";
-    std::cout << "**********RUHENGERI HOSPITAL MANAGEMENT SYSTEM *******\n";
     std::cout << "*****************************************************\n";
+    std::cout << "*****************************************************\n";
+    std::cout << "********* WELCOME TO HOSPITAL MANAGEMENT SYSTEM *****\n";
+    std::cout << "*****************************************************\n";
+    std::cout << "*****************************************************\n";
+    std::cout << "*****************************************************\n";
+    std::cout << "*****************************************************\n";
+
     while (true) {
         std::cout <<
                 "Menu:\n1. REGISTER PATIENT\n2. REGISTER DOCTOR\n3. REGISTER APPOINTMENT\n4. DISPLAY PATIENTS\n5. DISPLAY DOCTORS\n6. DISPLAY APPOINTMENTS\n7. EXIT\n";
@@ -367,16 +373,19 @@ int main() {
             switch (choice) {
                 case 1: {
                     // Register patient
+                    std::cout<<"______________________________ \n\n";
                     system.RegisterPatient();
                     break;
                 }
                 case 2: {
                     // Register doctor
+                    std::cout<<"______________________________ \n\n";
                     system.RegisterDoctor();
                     break;
                 }
                 case 3: {
                     // Register appointment
+                    std::cout<<"______________________________ \n\n";
                     system.RegisterAppointment();
                     break;
                 }
